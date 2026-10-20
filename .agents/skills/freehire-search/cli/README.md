@@ -1,3 +1,15 @@
+---
+title: freehire-cli
+tags: [cli, freehire, job-search, multi-market, tech, rest-api, bun]
+category: 工具
+created: 「待补充」
+updated: 「待补充」
+source: https://freehire.me
+type: CLI工具
+status: 活跃
+lifecycle: 稳定
+---
+
 # freehire-cli
 
 CLI for searching the [freehire.me](https://freehire.me) job aggregator across
@@ -14,27 +26,17 @@ CLI for searching the [freehire.me](https://freehire.me) job aggregator across
 > at a self-hosted [freehire](https://github.com/strelov1/freehire) backend to swap
 > the source.
 
-## Installation
+---
 
-```bash
-cd .agents/skills/freehire-search/cli
-bun install   # optional — only installs TypeScript dev types
-```
+## 💡 概述
 
-The CLI runs without any install because it has zero runtime dependencies.
+A zero-dependency Bun-based CLI tool for searching the freehire.me job aggregator across many markets (tech-focused), using its public REST API. Supports structured facet filtering, multi-market search, and self-hosting.
 
-## Self-hosting / base URL
+---
 
-The base URL defaults to `https://freehire.me` and is overridable with an env var:
+## ⚡ 功能
 
-```bash
-FREEHIRE_API_URL=http://localhost:8080 bun run src/cli.ts search -q "go"
-```
-
-The freehire backend is MIT-licensed and stands up with one command via Docker
-Compose (`make up` → API on `:8080`, same `/api/v1/...` paths).
-
-## Commands
+### Commands
 
 | Command | Description |
 |---------|-------------|
@@ -52,25 +54,7 @@ posting's **full** description (Markdown by default, `--description-format
 text|html` to change it). `detail` remains for looking a single posting up by
 slug — including a closed one, which search does not return.
 
-## Quick examples
-
-```bash
-# Senior backend roles, table view
-bun run src/cli.ts search -q "backend engineer" --seniority senior --limit 10 --format table
-
-# Remote React roles in the EU
-bun run src/cli.ts search -q "react" --remote remote --region eu --format table
-
-# DevOps roles in Germany posted in the last 14 days
-bun run src/cli.ts search --category devops --country DE --jobage 14 --format table
-
-# Full detail for one job (slug from a search result's id)
-bun run src/cli.ts detail golang-zensar-2bxu6dxm --format plain
-```
-
-See `../SKILL.md` for the full flag reference and the hosted-dependency note.
-
-## Search flags
+### Search flags
 
 | Flag | Alias | Description |
 |------|-------|-------------|
@@ -94,3 +78,78 @@ Facet values come from freehire's controlled vocabularies. Discover the live
 values (with counts) for a market at
 [`/api/v1/jobs/facets`](https://freehire.me/api/v1/jobs/facets), or narrow it,
 e.g. `https://freehire.me/api/v1/jobs/facets?q=react`.
+
+### Quick examples
+
+```bash
+# Senior backend roles, table view
+bun run src/cli.ts search -q "backend engineer" --seniority senior --limit 10 --format table
+
+# Remote React roles in the EU
+bun run src/cli.ts search -q "react" --remote remote --region eu --format table
+
+# DevOps roles in Germany posted in the last 14 days
+bun run src/cli.ts search --category devops --country DE --jobage 14 --format table
+
+# Full detail for one job (slug from a search result's id)
+bun run src/cli.ts detail golang-zensar-2bxu6dxm --format plain
+```
+
+See `../SKILL.md` for the full flag reference and the hosted-dependency note.
+
+---
+
+## 📊 指标
+
+「待补充」
+
+---
+
+## 🏛️ 设计
+
+### Self-hosting / base URL
+
+The base URL defaults to `https://freehire.me` and is overridable with an env var:
+
+```bash
+FREEHIRE_API_URL=http://localhost:8080 bun run src/cli.ts search -q "go"
+```
+
+The freehire backend is MIT-licensed and stands up with one command via Docker
+Compose (`make up` → API on `:8080`, same `/api/v1/...` paths).
+
+---
+
+## 📁 目录
+
+「待补充」
+
+---
+
+## 🔗 资源
+
+- **Job Aggregator**: [freehire.me](https://freehire.me)
+- **Self-hosted Backend**: [https://github.com/strelov1/freehire](https://github.com/strelov1/freehire)
+- **Facets Discovery**: [`/api/v1/jobs/facets`](https://freehire.me/api/v1/jobs/facets)
+- **Skill Documentation**: `../SKILL.md`
+
+---
+
+## 🚀 快速开始
+
+```bash
+cd .agents/skills/freehire-search/cli
+bun install   # optional — only installs TypeScript dev types
+```
+
+The CLI runs without any install because it has zero runtime dependencies.
+
+---
+
+## ⚙️ 技术栈
+
+- **Runtime**: Bun
+- **Language**: TypeScript
+- **Dependencies**: Zero runtime dependencies
+- **Data Source**: freehire.me REST API (JSON)
+- **Backend**: MIT-licensed, Docker Compose self-hostable

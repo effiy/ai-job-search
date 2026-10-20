@@ -1,3 +1,15 @@
+---
+title: jobnet-cli
+tags: [cli, jobnet, job-search, denmark, government, bun]
+category: 工具
+created: 「待补充」
+updated: 「待补充」
+source: https://jobnet.dk
+type: CLI工具
+status: 活跃
+lifecycle: 稳定
+---
+
 # jobnet-cli
 
 CLI for the [Jobnet.dk](https://jobnet.dk) Danish government job portal API.
@@ -8,16 +20,15 @@ CLI for the [Jobnet.dk](https://jobnet.dk) Danish government job portal API.
 
 ---
 
-## Installation
+## 💡 概述
 
-```bash
-cd .agents/skills/jobnet-search/cli
-bun install
-```
+A Bun-based CLI tool for searching and retrieving job listings from Jobnet.dk, the Danish government's official job portal. Uses a public REST API with ESCO occupation taxonomy support.
 
 ---
 
-## Commands
+## ⚡ 功能
+
+### Commands
 
 | Command | Description |
 |---------|-------------|
@@ -29,31 +40,7 @@ bun install
 All commands accept `--format json|table|plain` (default: `json`).
 All errors are written to **stderr** as `{ "error": "...", "code": "..." }` and the process exits with code `1`.
 
----
-
-## Regions
-
-| Value | Danish region |
-|-------|--------------|
-| `HovedstadenOgBornholm` | Hovedstaden og Bornholm |
-| `Midtjylland` | Midtjylland |
-| `Syddanmark` | Syddanmark |
-| `OevrigeSjaelland` | Øvrige Sjælland |
-| `Nordjylland` | Nordjylland |
-
----
-
-## Order types
-
-| Value | Description |
-|-------|-------------|
-| `PublicationDate` | Newest postings first (default) |
-| `BestMatch` | Relevance score (requires `--search-string`) |
-| `ApplicationDate` | Earliest deadline first |
-
----
-
-## `search` — Search for job ads
+### `search` — Search for job ads
 
 **Endpoint**: `GET /FindJob/Search`
 
@@ -61,7 +48,7 @@ All errors are written to **stderr** as `{ "error": "...", "code": "..." }` and 
 bun run src/cli.ts search [flags]
 ```
 
-### Flags
+#### Flags
 
 | Flag | Type | Default | Description |
 |------|------|---------|-------------|
@@ -81,7 +68,7 @@ bun run src/cli.ts search [flags]
 | `--order` | string | `PublicationDate` | Sort order (see Order types table) |
 | `--format` | string | `json` | Output format: `json`, `table`, `plain` |
 
-### Example
+#### Example
 
 ```bash
 bun run src/cli.ts search \
@@ -98,7 +85,7 @@ bun run src/cli.ts search \
   --per-page 10
 ```
 
-### Response shape
+#### Response shape
 
 ```json
 {
@@ -161,14 +148,10 @@ bun run src/cli.ts search \
 ```
 
 > **Note**: The `description` field (raw HTML) is intentionally omitted from `search` results for brevity. Use `detail` to retrieve the full job description.
-
 > **Note**: Every result also carries the cross-portal contract fields `company`, `location`, `date`, `deadline` and `url` - derived respectively from `hiringOrgName`, `postalDistrictName`/`municipality`, and the destination URL (the employer's `jobAdUrl` for external ads, or `/find-job/{jobAdId}` for internal ones). `/scrape` Step 2 expects search output to include title, company, location, date, and URL, and dates follow the `YYYY-MM-DD` convention of the other portal CLIs. The API's `1900-01-01` deadline sentinel (deadline not disclosed) maps to `null`. The native fields above are preserved unchanged.
-
 > **Note**: `resultsPerPage` and `pageNumber` must always be provided — omitting them while also providing `searchString` causes the API to return error 1014 ("Fejl i formatering af inputs").
 
----
-
-## `detail` — Full job ad detail
+### `detail` — Full job ad detail
 
 **Endpoint**: `GET /FindJob/JobAdDetails/{id}`
 
@@ -180,14 +163,14 @@ The `id` is the `jobAdId` UUID from `search` results.
 
 By default the CLI passes `incrementViews=false` to avoid polluting view counts.
 
-### Example
+#### Example
 
 ```bash
 bun run src/cli.ts detail 9ef43bce-d82b-4ea1-a098-7ff6520f99be
 bun run src/cli.ts detail 9ef43bce-d82b-4ea1-a098-7ff6520f99be --format plain
 ```
 
-### Response shape
+#### Response shape
 
 ```json
 {
@@ -251,12 +234,9 @@ bun run src/cli.ts detail 9ef43bce-d82b-4ea1-a098-7ff6520f99be --format plain
 ```
 
 > **Note**: `body` contains raw HTML. In `--format plain` output the CLI strips HTML tags to produce readable text.
-
 > **Note**: `application.url` may be empty for some job ads — the employer may only accept applications through Jobnet's internal system.
 
----
-
-## `occupations` — Search occupation types
+### `occupations` — Search occupation types
 
 **Endpoint**: `GET /OccupationSearch`
 
@@ -266,7 +246,7 @@ bun run src/cli.ts occupations --search-string <text> [flags]
 
 Use this command to find occupation identifiers (ESCO concept URIs) to pass to `search --occupation`.
 
-### Flags
+#### Flags
 
 | Flag | Type | Default | Description |
 |------|------|---------|-------------|
@@ -274,13 +254,13 @@ Use this command to find occupation identifiers (ESCO concept URIs) to pass to `
 | `--per-page` | number | `10` | Max results to return |
 | `--format` | string | `json` | Output format: `json`, `table`, `plain` |
 
-### Example
+#### Example
 
 ```bash
 bun run src/cli.ts occupations --search-string "sygeplejerske" --per-page 5
 ```
 
-### Response shape
+#### Response shape
 
 ```json
 [
@@ -300,9 +280,7 @@ bun run src/cli.ts occupations --search-string "sygeplejerske" --per-page 5
 
 > **Note**: `conceptUriDa` is the full ESCO concept URI. Pass it, or its UUID (last path segment), to `search --occupation`. The numeric `--occupation-area` / `--occupation-group` codes are a different taxonomy and match no ads for a UUID.
 
----
-
-## `suggestions` — Typeahead suggestions
+### `suggestions` — Typeahead suggestions
 
 **Endpoint**: `GET /FindJob/GetTypeaheadSuggestions`
 
@@ -312,7 +290,7 @@ bun run src/cli.ts suggestions --query <text> [flags]
 
 Returns autocomplete strings for the search box — useful for exploring valid Danish job titles before running a `search`.
 
-### Flags
+#### Flags
 
 | Flag | Type | Default | Description |
 |------|------|---------|-------------|
@@ -320,14 +298,14 @@ Returns autocomplete strings for the search box — useful for exploring valid D
 | `--limit` | number | — | Cap number of suggestions returned |
 | `--format` | string | `json` | Output format: `json`, `table`, `plain` |
 
-### Example
+#### Example
 
 ```bash
 bun run src/cli.ts suggestions --query "syge"
 bun run src/cli.ts suggestions --query "ingeniør" --limit 5
 ```
 
-### Response shape
+#### Response shape
 
 ```json
 [
@@ -341,7 +319,31 @@ bun run src/cli.ts suggestions --query "ingeniør" --limit 5
 
 ---
 
-## Error handling
+## 📊 指标
+
+### Regions
+
+| Value | Danish region |
+|-------|--------------|
+| `HovedstadenOgBornholm` | Hovedstaden og Bornholm |
+| `Midtjylland` | Midtjylland |
+| `Syddanmark` | Syddanmark |
+| `OevrigeSjaelland` | Øvrige Sjælland |
+| `Nordjylland` | Nordjylland |
+
+### Order types
+
+| Value | Description |
+|-------|-------------|
+| `PublicationDate` | Newest postings first (default) |
+| `BestMatch` | Relevance score (requires `--search-string`) |
+| `ApplicationDate` | Earliest deadline first |
+
+---
+
+## 🏛️ 设计
+
+### Error handling
 
 All errors are written to **stderr** in JSON format and exit with code `1`:
 
@@ -352,9 +354,7 @@ All errors are written to **stderr** in JSON format and exit with code `1`:
 { "error": "--search-string is required", "code": "MISSING_REQUIRED" }
 ```
 
----
-
-## URL construction
+### URL construction
 
 Job ad detail pages on jobnet.dk:
 
@@ -376,9 +376,7 @@ https://jobnet.dk{logoUrl}
 
 Example: `https://jobnet.dk/bff/SharedComponents/JobAdCard/CompanyLogo/ByJobAdId/9ef43bce-d82b-4ea1-a098-7ff6520f99be`
 
----
-
-## Notes
+### Notes
 
 - All data is from the public `jobnet.dk/bff` REST API — no credentials required.
 - The `x-csrf: 1` header must be sent with every request.
@@ -386,3 +384,35 @@ Example: `https://jobnet.dk/bff/SharedComponents/JobAdCard/CompanyLogo/ByJobAdId
 - `search` results intentionally omit the HTML `description` field — use `detail` to fetch it.
 - `body` in `detail` responses is raw HTML; use `--format plain` to get stripped text.
 - The `occupations` command helps discover ESCO occupation URIs to pass to `search --occupation` for narrowing search results.
+
+---
+
+## 📁 目录
+
+「待补充」
+
+---
+
+## 🔗 资源
+
+- **Job Portal**: [Jobnet.dk](https://jobnet.dk)
+- **API Base**: `https://jobnet.dk/bff`
+- **ESCO Taxonomy**: `http://data.star.dk/esco/`
+
+---
+
+## 🚀 快速开始
+
+```bash
+cd .agents/skills/jobnet-search/cli
+bun install
+```
+
+---
+
+## ⚙️ 技术栈
+
+- **Runtime**: Bun
+- **Language**: TypeScript
+- **Data Source**: Jobnet.dk BFF REST API (JSON)
+- **Taxonomy**: ESCO (European Skills, Competences, Qualifications and Occupations)

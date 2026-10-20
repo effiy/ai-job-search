@@ -1,3 +1,15 @@
+---
+title: jobindex-cli
+tags: [cli, jobindex, job-search, denmark, html-parsing, bun]
+category: 工具
+created: 「待补充」
+updated: 「待补充」
+source: https://www.jobindex.dk
+type: CLI工具
+status: 活跃
+lifecycle: 稳定
+---
+
 # jobindex-cli
 
 CLI for searching jobs on [Jobindex.dk](https://www.jobindex.dk).
@@ -8,16 +20,15 @@ CLI for searching jobs on [Jobindex.dk](https://www.jobindex.dk).
 
 ---
 
-## Installation
+## 💡 概述
 
-```bash
-cd .agents/skills/jobindex-search/cli
-bun install
-```
+A Bun-based CLI tool for searching and retrieving job listings from Jobindex.dk, Denmark's largest job portal. Parses embedded `Stash` JSON data from search result pages and HTML detail pages.
 
 ---
 
-## Commands
+## ⚡ 功能
+
+### Commands
 
 | Command | Description |
 |---------|-------------|
@@ -27,9 +38,7 @@ bun install
 All commands accept `--format json|table|plain` (default: `json`).
 All errors are written to **stderr** as `{ "error": "...", "code": "..." }` and the process exits with code `1`.
 
----
-
-## `search` — Search for job listings
+### `search` — Search for job listings
 
 **Endpoint**: `GET https://www.jobindex.dk/jobsoegning`
 
@@ -39,7 +48,7 @@ bun run src/cli.ts search --query "<text>" [flags]
 
 The portal returns 20 results per page (fixed — no `--per-page` flag). The CLI reads `searchResponse.results` from the page's `var Stash = {...}` script. `--query` is required; a query-free search exits with `MISSING_REQUIRED` before fetching.
 
-### Flags
+#### Flags
 
 | Flag | Type | Default | Description |
 |------|------|---------|-------------|
@@ -50,14 +59,14 @@ The portal returns 20 results per page (fixed — no `--per-page` flag). The CLI
 | `--limit` | number | — | Cap total results returned by the CLI (client-side) |
 | `--format` | string | `json` | Output format: `json`, `table`, `plain` |
 
-### Sort options
+#### Sort options
 
 | Value | Description |
 |-------|-------------|
 | `score` | Relevance / best match (default) |
 | `date` | Newest postings first |
 
-### jobage options
+#### jobage options
 
 | Value | Description |
 |-------|-------------|
@@ -67,7 +76,7 @@ The portal returns 20 results per page (fixed — no `--per-page` flag). The CLI
 | `30` | Last 30 days |
 | `9999` | All time (default) |
 
-### Example
+#### Example
 
 ```bash
 # Search for Python jobs posted in the last 7 days, sorted by date
@@ -80,7 +89,7 @@ bun run src/cli.ts search --query "grafisk designer" --limit 5
 bun run src/cli.ts search --query "data engineer" --page 2 --format table
 ```
 
-### Response shape
+#### Response shape
 
 ```json
 {
@@ -118,9 +127,7 @@ bun run src/cli.ts search --query "data engineer" --page 2 --format table
 
 > **Note on area filtering**: The Jobindex API does not reliably support area/region filtering via query parameters. `area` and `geoareaid` params are silently ignored. To filter by location, use `--query` with a city name (e.g. `--query "python aarhus"`) or apply `--limit` and filter the JSON output externally.
 
----
-
-## `detail` — Fetch full job listing detail
+### `detail` — Fetch full job listing detail
 
 **URL**: `https://www.jobindex.dk/jobannonce/{id}/{slug}`
 
@@ -132,13 +139,13 @@ The `id` is the job ID from `search` results (e.g. `h1647303`). The slug is opti
 
 You may also pass the full URL directly as the `id` argument.
 
-### Flags
+#### Flags
 
 | Flag | Type | Default | Description |
 |------|------|---------|-------------|
 | `--format` | string | `json` | Output format: `json`, `plain` |
 
-### Example
+#### Example
 
 ```bash
 # Using ID from search results
@@ -151,7 +158,7 @@ bun run src/cli.ts detail "https://www.jobindex.dk/jobannonce/h1647303/data-engi
 bun run src/cli.ts detail h1647303 --format plain
 ```
 
-### Response shape
+#### Response shape
 
 ```json
 {
@@ -197,7 +204,15 @@ widgets when present.
 
 ---
 
-## Error handling
+## 📊 指标
+
+「待补充」
+
+---
+
+## 🏛️ 设计
+
+### Error handling
 
 All errors are written to **stderr** in JSON format and exit with code `1`:
 
@@ -208,20 +223,16 @@ All errors are written to **stderr** in JSON format and exit with code `1`:
 { "error": "--query is required", "code": "MISSING_REQUIRED" }
 ```
 
----
-
-## URL construction
+### URL construction
 
 Job detail pages on jobindex.dk:
 - `https://www.jobindex.dk/jobannonce/{id}/{slug}`
 
 Search emits the canonical URL without a slug. When calling `detail` with an ID or full posting URL, the CLI rebuilds `https://www.jobindex.dk/jobannonce/{id}` and follows redirects.
 
----
+### Parsing notes
 
-## Parsing notes
-
-### Search results from `Stash`
+#### Search results from `Stash`
 
 The former `/jobsoegning.json` endpoint no longer provides the search payload.
 The HTML search page embeds structured data in a `var Stash = {...}` script.
@@ -247,3 +258,34 @@ example under `jobsearch.result_app.storeData.searchResponse`:
 The active search path maps these fields directly; it does not parse job-card
 HTML or `hitcount_html`. `extractStash` and `parseSearchPage` in `src/helpers.ts`
 implement this path. The legacy `parseJobCards` helper is not used by `search`.
+
+---
+
+## 📁 目录
+
+「待补充」
+
+---
+
+## 🔗 资源
+
+- **Job Portal**: [Jobindex.dk](https://www.jobindex.dk)
+- **Search**: `https://www.jobindex.dk/jobsoegning`
+
+---
+
+## 🚀 快速开始
+
+```bash
+cd .agents/skills/jobindex-search/cli
+bun install
+```
+
+---
+
+## ⚙️ 技术栈
+
+- **Runtime**: Bun
+- **Language**: TypeScript
+- **Data Source**: HTML with embedded `var Stash = {...}` JSON
+- **Parsing**: Stash extraction, HTML detail page parsing

@@ -1,3 +1,15 @@
+---
+title: linkedin-cli
+tags: [cli, linkedin, job-search, global, bun]
+category: 工具
+created: 「待补充」
+updated: 「待补充」
+source: https://www.linkedin.com
+type: CLI工具
+status: 活跃
+lifecycle: 稳定
+---
+
 # linkedin-cli
 
 CLI for searching jobs on LinkedIn's public job listings, for **any country/region**
@@ -11,16 +23,17 @@ CLI for searching jobs on LinkedIn's public job listings, for **any country/regi
 > LinkedIn's Terms of Service. Keep volume low, don't use it commercially or for bulk data
 > collection, and run it on your own responsibility.
 
-## Installation
+---
 
-```bash
-cd .agents/skills/linkedin-search/cli
-bun install   # optional — only installs TypeScript dev types
-```
+## 💡 概述
 
-The CLI runs without any install because it has zero runtime dependencies.
+A zero-dependency Bun-based CLI tool for searching LinkedIn's public job listings across any country or region. Uses unauthenticated `jobs-guest` endpoints to search and retrieve job postings.
 
-## Commands
+---
+
+## ⚡ 功能
+
+### Commands
 
 | Command | Description |
 |---------|-------------|
@@ -30,7 +43,19 @@ The CLI runs without any install because it has zero runtime dependencies.
 `search` accepts `--format json|table|plain` (default `json`); `detail` accepts `--format json|plain`.
 All errors are written to **stderr** as `{ "error": "...", "code": "..." }` with exit code `1`.
 
-## Quick examples
+### Search flags
+
+| Flag | Alias | Description |
+|------|-------|-------------|
+| `--location` | `-l` | **Required.** Place string, e.g. `"Mumbai, Maharashtra, India"`, `"Berlin, Germany"`, `"Remote"`. |
+| `--query` | `-q` | Keywords (title / skill / role). Recommended. |
+| `--jobage` | | Posted within N days: `1`, `7`, `14`, `30`. |
+| `--remote` | | `remote` \| `hybrid` \| `onsite`. |
+| `--page` | | 1-indexed page (10 results/page). |
+| `--limit` | `-n` | Cap results emitted. |
+| `--format` | | `json` \| `table` \| `plain`. |
+
+### Quick examples
 
 ```bash
 # Software roles in Hyderabad, last 7 days
@@ -48,14 +73,47 @@ bun run src/cli.ts detail 4426311357 --format plain
 
 See `../SKILL.md` for the full flag reference and the Terms-of-Service note.
 
-## Search flags
+---
 
-| Flag | Alias | Description |
-|------|-------|-------------|
-| `--location` | `-l` | **Required.** Place string, e.g. `"Mumbai, Maharashtra, India"`, `"Berlin, Germany"`, `"Remote"`. |
-| `--query` | `-q` | Keywords (title / skill / role). Recommended. |
-| `--jobage` | | Posted within N days: `1`, `7`, `14`, `30`. |
-| `--remote` | | `remote` \| `hybrid` \| `onsite`. |
-| `--page` | | 1-indexed page (10 results/page). |
-| `--limit` | `-n` | Cap results emitted. |
-| `--format` | | `json` \| `table` \| `plain`. |
+## 📊 指标
+
+「待补充」
+
+---
+
+## 🏛️ 设计
+
+「待补充」
+
+---
+
+## 📁 目录
+
+「待补充」
+
+---
+
+## 🔗 资源
+
+- **LinkedIn Jobs**: [https://www.linkedin.com/jobs](https://www.linkedin.com/jobs)
+- **Skill Documentation**: `../SKILL.md`
+
+---
+
+## 🚀 快速开始
+
+```bash
+cd .agents/skills/linkedin-search/cli
+bun install   # optional — only installs TypeScript dev types
+```
+
+The CLI runs without any install because it has zero runtime dependencies.
+
+---
+
+## ⚙️ 技术栈
+
+- **Runtime**: Bun
+- **Language**: TypeScript
+- **Dependencies**: Zero runtime dependencies
+- **Data Source**: LinkedIn `jobs-guest` public endpoints

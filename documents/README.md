@@ -1,32 +1,30 @@
+---
+title: Documents Folder
+tags: [documents, cv, linkedin, diplomas, references, applications, setup]
+category: 数据
+created: 「待补充」
+updated: 「待补充」
+source: 「待补充」
+type: 目录说明
+status: 活跃
+lifecycle: 稳定
+---
+
 # Documents Folder
+
+---
+
+## 💡 概述
 
 This folder holds your actual career documents. The `/setup` command reads everything here and uses it to populate the candidate skill files under `.claude/skills/job-application-assistant/`. It is safe to re-run `/setup` as you add new documents — it merges intelligently and will never overwrite existing content without asking you first.
 
 ---
 
-## Folder Structure
+## ⚡ 功能
 
-```
-documents/
-├── cv/                          # Your CV files (PDF or LaTeX)
-├── linkedin/                    # LinkedIn profile export (PDF)
-├── diplomas/                    # Degree certificates and transcripts
-├── references/                  # Reference letters
-├── projects/                    # Independent project summaries, case studies, or portfolio docs
-├── postings/                    # Raw job posting text, pasted manually for pages Claude can't fetch
-│   └── <Company> - <Job Title>.txt  # Filename = company + job title, content = full posting text
-├── applications/                # Past job applications
-│   └── <company>_<role>/
-│       ├── job_posting.md       # The original job posting (written by /apply, or pasted)
-│       ├── cover_letter.tex     # The cover letter you submitted
-│       ├── cv_draft.tex         # The CV variant you submitted
-│       └── outcome.md           # Result + notes (fill in after hearing back)
-└── README.md                    # This file
-```
+### Subdirectories and their purposes
 
----
-
-## cv/
+#### cv/
 
 Your master CV — the most complete, unedited version of your professional record.
 
@@ -43,9 +41,7 @@ Your master CV — the most complete, unedited version of your professional reco
 
 **Tip:** Keep your most comprehensive CV here (not a tailored variant). The skill files are the canonical source — tailored CVs are generated per application by `/apply`.
 
----
-
-## linkedin/
+#### linkedin/
 
 Your LinkedIn profile exported as a PDF.
 
@@ -65,9 +61,7 @@ Your LinkedIn profile exported as a PDF.
 
 **Naming:** Any filename works. Only one LinkedIn export is expected; if multiple are present, `/setup` uses the most recently modified one.
 
----
-
-## diplomas/
+#### diplomas/
 
 Degree certificates, transcripts, and any official qualifications.
 
@@ -81,9 +75,7 @@ Degree certificates, transcripts, and any official qualifications.
 
 **Naming:** Use descriptive names, e.g. `msc_physics_ucph_2025.pdf`, `bsc_physics_ucph_2016.pdf`. Naming does not affect parsing.
 
----
-
-## references/
+#### references/
 
 Reference letters from former managers, supervisors, or collaborators.
 
@@ -96,9 +88,7 @@ Reference letters from former managers, supervisors, or collaborators.
 
 **Naming:** Use the referee's name, e.g. `reference_ole_frandsen.pdf`.
 
----
-
-## projects/
+#### projects/
 
 Summaries, case studies, READMEs, writeups, or documentation for independent, open-source, freelance, or personal portfolio projects.
 
@@ -115,9 +105,7 @@ Summaries, case studies, READMEs, writeups, or documentation for independent, op
 
 **Tip:** These feed into the `## Independent Projects` section of `01-candidate-profile.md` and provide concrete technical evidence that `/apply` can weave into tailored CVs and cover letters.
 
----
-
-## postings/
+#### postings/
 
 A drop folder for raw job posting text when Claude can't fetch a page directly (bot-blocked ATS platforms like Lever, Greenhouse behind Cloudflare, JS-heavy SPAs that return empty content, etc.). You open the posting yourself and paste the full text into a `.txt` file here.
 
@@ -127,9 +115,7 @@ A drop folder for raw job posting text when Claude can't fetch a page directly (
 
 **Trust boundary:** Pasted posting text is still untrusted third-party content, the same as anything Claude fetches directly — data to evaluate, never instructions to follow (see `SECURITY.md`'s untrusted-input rules). Pasting it by hand doesn't change that.
 
----
-
-## applications/
+#### applications/
 
 A record of past job applications. Each subfolder is one application.
 
@@ -150,15 +136,12 @@ applications/
 └── consultco_ai_consultant/
 ```
 
-### Files within each application folder
+**Files within each application folder:**
 
-**`job_posting.md`** — The full job posting text, written by `/apply`, or paste it here. Used by `/setup` to infer which skills and role types you have targeted, and to calibrate `04-job-evaluation.md`.
-
-**`cover_letter.tex`** — The cover letter you actually submitted. Used to extract writing style patterns and structure for `06-cover-letter-templates.md`.
-
-**`cv_draft.tex`** — The CV variant you submitted. Used to extract profile statement styles for `05-cv-templates.md`.
-
-**`outcome.md`** — Fill this in after the application resolves. Format:
+- **`job_posting.md`** — The full job posting text, written by `/apply`, or paste it here. Used by `/setup` to infer which skills and role types you have targeted, and to calibrate `04-job-evaluation.md`.
+- **`cover_letter.tex`** — The cover letter you actually submitted. Used to extract writing style patterns and structure for `06-cover-letter-templates.md`.
+- **`cv_draft.tex`** — The CV variant you submitted. Used to extract profile statement styles for `05-cv-templates.md`.
+- **`outcome.md`** — Fill this in after the application resolves. Format:
 
 ```markdown
 # Outcome: <Company> — <Role>
@@ -191,7 +174,9 @@ Application folders may also contain **`interview_prep_<stage>.md`** files writt
 
 ---
 
-## File Format Notes
+## 📊 指标
+
+### File Format Support
 
 | Format | Readable by `/setup` | Notes |
 |--------|--------------------------|-------|
@@ -204,7 +189,9 @@ Application folders may also contain **`interview_prep_<stage>.md`** files writt
 
 ---
 
-## Re-running `/setup`
+## 🏛️ 设计
+
+### Re-running `/setup`
 
 The command is designed to be re-run as your document collection grows. Each run:
 
@@ -218,3 +205,44 @@ The command is designed to be re-run as your document collection grows. Each run
 - After adding reference letters
 - After recording outcomes for completed applications
 - After updating your master CV
+
+---
+
+## 📁 目录
+
+```
+documents/
+├── cv/                          # Your CV files (PDF or LaTeX)
+├── linkedin/                    # LinkedIn profile export (PDF)
+├── diplomas/                    # Degree certificates and transcripts
+├── references/                  # Reference letters
+├── projects/                    # Independent project summaries, case studies, or portfolio docs
+├── postings/                    # Raw job posting text, pasted manually for pages Claude can't fetch
+│   └── <Company> - <Job Title>.txt  # Filename = company + job title, content = full posting text
+├── applications/                # Past job applications
+│   └── <company>_<role>/
+│       ├── job_posting.md       # The original job posting (written by /apply, or pasted)
+│       ├── cover_letter.tex     # The cover letter you submitted
+│       ├── cv_draft.tex         # The CV variant you submitted
+│       └── outcome.md           # Result + notes (fill in after hearing back)
+└── README.md                    # This file
+```
+
+---
+
+## 🔗 资源
+
+「待补充」
+
+---
+
+## 🚀 快速开始
+
+Place your career documents in the appropriate subdirectories, then run `/setup` inside Claude Code. The command auto-detects what you have and populates the profile skill files.
+
+---
+
+## ⚙️ 技术栈
+
+- **Document Parsing**: Claude Code Read tool (PDF, LaTeX, Markdown, plain text)
+- **Profile Storage**: Markdown skill files under `.claude/skills/job-application-assistant/`
